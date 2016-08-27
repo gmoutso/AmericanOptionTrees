@@ -44,9 +44,10 @@ $(MAKEDIRS):
 
 .PHONY: clean
 
+GARBAGE := $(foreach DIR,$(MAKEDIRS),$(DIR)/*)
 clean:
-	$(RM) $(OBJDIR)/*
-	$(RMDIR) $(OBJDIR)
-	$(RM) $(BINDIR)/*
-	$(RMDIR) $(BINDIR)
+#	$(RM) $(OBJDIR)/*
+#	$(RMDIR) $(OBJDIR)
+	$(RM) $(GARBAGE)
+	$(RMDIR) $(MAKEDIRS)
 
