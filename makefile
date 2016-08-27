@@ -6,20 +6,20 @@ SHELL = /bin/sh
 
 CXX=g++
 RM=rm -f
-RMDIR=rm -r
+RMDIR=rm -rf
 
 # not all systems have -p 
 
 MKDIR_P = mkdir -p 
 
-# Targets in Project
-
-ALLTARGETS=americancalc
-
 # Directories
 IDIR=include
 OBJDIR=tmp
-MAKEDIRS=$(OBJDIR)
+BINDIR=bin
+MAKEDIRS=$(OBJDIR) $(BINDIR)
+# Targets in Project
+ALLTARGETS=$(BINDIR)/americancalc
+
 
 vpath %.cpp source mains
 
@@ -29,7 +29,7 @@ LDLIBS=-lm
 
 all: $(ALLTARGETS)
 
-americancalc: $(addprefix $(OBJDIR)/, AmericanCalc.o americanbinomial.o payoffs.o simplebinomial.o)
+$(BINDIR)/americancalc: $(addprefix $(OBJDIR)/, AmericanCalc.o americanbinomial.o payoffs.o simplebinomial.o) | $(BINDIR)
 	$(LINK.cpp) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 $(OBJDIR)/%.o : %.cpp | $(OBJDIR)
@@ -46,4 +46,7 @@ $(MAKEDIRS):
 
 clean:
 	$(RM) $(OBJDIR)/*
-	$(RMDIR) $(OBJDIR) 
+	$(RMDIR) $(OBJDIR)
+	$(RM) $(BINDIR)/*
+	$(RMDIR) $(BINDIR)
+
