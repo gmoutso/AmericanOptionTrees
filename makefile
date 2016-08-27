@@ -46,8 +46,6 @@ $(MAKEDIRS):
 
 GARBAGE := $(foreach DIR,$(MAKEDIRS),$(DIR)/*)
 clean:
-#	$(RM) $(OBJDIR)/*
-#	$(RMDIR) $(OBJDIR)
 	$(RM) $(GARBAGE)
 	$(RMDIR) $(MAKEDIRS)
 
