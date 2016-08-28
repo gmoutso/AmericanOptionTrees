@@ -80,15 +80,24 @@ void BinomialTree::PushItem(unsigned int ups, unsigned int downs,const TreeNodeI
 }
 
 /// format a Binomial Tree in an output stream
+/// in a given layer we stream on each line the nodes from the TOP
 ostream& operator<<(ostream& ost,const BinomialTree& tree) {
   stringstream line;
   int depth = tree.GetDepth();
-  for (int i=0; i<depth+1; i++) {
-    for (int j=0; j<i; j++) { //not include the downmost 
-      const TreeNode& thisnode = tree.GetNode(i-j,j);
+  int basedepth = tree.GetBaseDepth();
+  for (int deep=0 ; deep < depth+1; deep++) {
+    for (int offset = basedepth; offset > 0 ; offset--) {
+      int up = deep, down = 0;
+      const TreeNode& thisnode = tree.GetNode(up,down,offset);
       line << thisnode << ", ";
     }
-    const TreeNode& thisnode = tree.GetNode(0,i); //include the downmost
+    // do not include the downmost node (due to comma in format)
+    for (int down=0; down < deep; down++) {
+      int up = deep-down, offset = 0;
+      const TreeNode& thisnode = tree.GetNode(up,down,offset);
+      line << thisnode << ", ";
+    }
+    const TreeNode& thisnode = tree.GetNode(0,deep,0); //include the downmost
     line << thisnode << endl;
     ost << line.str();
     line.str(string());
