@@ -1,3 +1,8 @@
 tmp/
 bin/
 *~
+
+# python auxiliaries
+python/**
+!python/**/*.py
+!python/**/*.ipynb
