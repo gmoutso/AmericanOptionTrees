@@ -19,9 +19,10 @@ public:
   const double& GetStock(unsigned int up, unsigned int down, unsigned int offset=0) const;
   void saveas(string filename);
 private:
-  double S0_;
-  double S0max_;
+  double S0min_;
+  // double S0max_;
   unsigned int basefactor_;
+  unsigned int spd_;
   // unsigned int basedepth_;
   double discount_;
   double up_;

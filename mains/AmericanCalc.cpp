@@ -8,10 +8,10 @@ using namespace std;
 
 int main() {
 
-  cout << "tree level: ";
-  int N;
-  cin >> N;
-  cout << "\n";
+  // cout << "tree level: ";
+  // int N;
+  // cin >> N;
+  // cout << "\n";
 
   double S0;
   cout << "enter spot rate: ";
@@ -27,9 +27,14 @@ int main() {
   cout << "enter annual volatility: ";
   while(cin >> vol && vol==0) { cout << "\nWarning volatility cannot be zero. Try again: "; }
   cout << "\n";
-  
+
+  double days,spd,basefactor;
+  cout << "enter days, steps per day and basefactor (separated by space): ";
+  cin >> days >> spd >> basefactor;
+  cout << "\n";
+
   cout << "Making binomial tree..." << "\n";
-  BinomialStockTree tree(S0,vol,interest,N);
+  BinomialStockTree tree(S0,vol,interest,days,spd,basefactor);
 
   double strike;
   cout << "\nenter an American put strike: ";

@@ -53,9 +53,11 @@ public:
   const TreeNode& GetNode(unsigned int ups, unsigned int downs, unsigned int offset=0) const;
   /// push the name of the n'th Tree Node Item (stored separately to the tree)
   void PushName(const string&);
+  vector<string> const & GetNames() const {return nodedatanames_;}
   /// Get the depth of the tree
   const unsigned int& GetDepth() const {return depth_;}
   const unsigned int& GetBaseDepth() const {return basedepth_;}
+  // streamer
   friend ostream& operator<<(ostream&,const BinomialTree&);
 protected:
   void PushItem(unsigned int ups, unsigned int downs, const TreeNodeItem&, unsigned int offset=0);

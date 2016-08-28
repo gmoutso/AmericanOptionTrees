@@ -72,10 +72,10 @@ void BinomialTree::PushName(const string& s)
 { nodedatanames_.push_back(s); }
 
 const TreeNode& BinomialTree::GetNode(unsigned int ups, unsigned int downs, unsigned int offset) const
-{ return treedata_[ups+downs][downs+offset]; }
+{ return treedata_[ups+downs][downs+GetBaseDepth()-offset]; }
 
 void BinomialTree::PushItem(unsigned int ups, unsigned int downs,const TreeNodeItem& item, unsigned int offset){
-  TreeNode& node = treedata_[ups+downs][downs+offset];
+  TreeNode& node = treedata_[ups+downs][downs+GetBaseDepth()-offset];
   node.PushItem(item);
 }
 

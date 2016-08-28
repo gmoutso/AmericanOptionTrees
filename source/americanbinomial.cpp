@@ -11,7 +11,7 @@ using namespace std;
 
 BinomialStockTree::BinomialStockTree(double S0min, double volatility, double interest_rate, unsigned int days, unsigned int steps_per_day, unsigned int basefactor):
   BinomialTree(days * steps_per_day, basefactor * steps_per_day), // FIX!
-  S0_(S0min), S0max_(S0min),
+  S0min_(S0min), spd_(steps_per_day), 
   basefactor_(basefactor) {
   // calculate the discount per step
   // compounding will happen steps_per_day times per day!
@@ -25,10 +25,10 @@ BinomialStockTree::BinomialStockTree(double S0min, double volatility, double int
   double p = (1/discount_ - down)/(up_-down);
   riskp_=p;
   // fix S0max to fit in mesh
-  // we record basedepth (in BinomialTree),
-  // basefactor, steps_per_day. but they are related
-  // which one to remove?
-  // double basedepth = basefactor * steps_per_day;
+  // we record basedepth and depth (in BinomialTree),
+  // basefactor and we also have steps_per_day. They are related
+  // basedepth = basefactor * steps_per_day;
+  // depth = days * steps_per_day
   // S0max_ = S0min * pow(up_, basedepth_ );
   // build the stock data
   BuildStockData();
@@ -38,7 +38,7 @@ void BinomialStockTree::BuildStockData() {
   // ups from S0_min = -depth, ... , basedepth+depth
   stocks_.resize(2 * GetDepth()  + GetBaseDepth() + 1);
   // lowermost stock
-  double stock = S0_/ pow(up_ , GetDepth());
+  double stock = S0min_/ pow(up_ , GetDepth());
   for (auto&& i : stocks_) {	// C++11, access by reference
     i = stock;			// the type of i is double&
     stock *= up_;
@@ -51,7 +51,7 @@ const double& BinomialStockTree::GetStock(unsigned int up,unsigned int down, uns
   return stocks_[depth + up -down +offset];
 }
 
-/// An auxiliary provate function
+/// An auxiliary private function
 /// that calculates and pushes an american option price
 /// to be used by PushAmericanOption
 TreeNodeItem BinomialStockTree::IncrementalPrice(unsigned int up, unsigned int down, Put& option, unsigned int offset) {
@@ -69,6 +69,7 @@ TreeNodeItem BinomialStockTree::IncrementalPrice(unsigned int up, unsigned int d
 void BinomialStockTree::PushAmericanOption(Put& option) {
   const unsigned int& depth=GetDepth();
   const unsigned int& basedepth=GetBaseDepth();
+  PushName("American Put");
   // first calculate the payoff at maturity
   for (unsigned int down = 0; down < depth+1; down++) { 
     unsigned int up = depth - down;
@@ -101,7 +102,17 @@ void BinomialStockTree::saveas(string filename){
   ofstream file (filename);
     if (file.is_open())
       {
-	file<<*this;
+	// json data in one line
+	file << "{ \"S0min\": " << S0min_
+	     << ", \"depth\": " << GetDepth()
+	     << ", \"basedepth\": " << GetBaseDepth()
+	     << ", \"basefactor\": " << basefactor_
+	     << ", \"spd\": " << spd_
+	     << ", \"up\": " << up_
+	     << ", \"options\": " << GetNames().size()
+	     << " }" << "\n";
+	// the next streamer is that of BinomialTree
+	file << *this;
 	file.close();
       }
     else cout << "Unable to open file"; 
