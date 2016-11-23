@@ -1,6 +1,6 @@
 # AmericanOptionTrees
 
-A library to visualize the evolution of American put option prices on a binomial tree, marking also which are the exercise nodes.
+A library to visualize the evolution of American put option prices on a binomial tree, marking also which are the exercise nodes. The numerical work is in C++ and the visualization is in python.
 
 ## The Calculator
 The calculator is compiled using g++ with `make bin/americancalc`. It allows you to save the computed price tree of a put option in a text file.
